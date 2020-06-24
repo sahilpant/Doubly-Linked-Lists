@@ -9,6 +9,7 @@ struct DLLNode
     struct DLLNode *right = NULL;
 }*head = NULL;
 
+int n = 0;
 typedef struct DLLNode node;
 
 void CreateList(){
@@ -19,6 +20,7 @@ void CreateList(){
     cin>>data;
     NewNode->data = data;
     head = NewNode;
+    n++;
 }
 
 void InsertBeg(int data){
@@ -27,9 +29,15 @@ void InsertBeg(int data){
     NewNode->data = data;
     NewNode->right = head;
     head = NewNode;
+    n++;
 }
 
 void show(){
+    if(head == NULL)
+    {
+        cout<<"LIST IS EMPTY";
+        return;
+    }
     node *p;
     p = head;
     while(p)
@@ -67,9 +75,18 @@ void RandomInsert(int data,int pos){
             NewNode->left = q;
         }
     }
+    n++;
 }
 
-void InsertEnd(int data){
+void InsertEnd(){
+    if(n==0)
+    {
+        CreateList();
+        return;
+    }
+    int data;
+    cout<<"Enter the data::";
+    cin>>data;
     node *NewNode, *p,*q;
     NewNode = new node;
     NewNode->data = data;
@@ -81,13 +98,33 @@ void InsertEnd(int data){
     q->right = NewNode;
     NewNode->left = q;
     NewNode->right = NULL;
+    n++;
+}
+
+void DeleteBeg(){
+    if(head == NULL)
+    {
+        cout<<"LIST IS EMPTY";
+        return;
+    }
+    node *temp;
+    temp = head;
+    head = head->right;
+    delete(temp);
+    n--;
 }
 
 void DeleteEnd()
 {
+    if(n==1)
+    {
+        DeleteBeg();
+        return;
+    }
     if(head == NULL)
     {
         cout<<"LIST IS EMPTY";
+        return;
     }
     node *p, *q, *temp;
     p = head;
@@ -99,18 +136,7 @@ void DeleteEnd()
     temp = q->left;
     temp->right = NULL;
     delete(q);
-}
-
-void DeleteBeg(){
-    if(head == NULL)
-    {
-        cout<<"LIST IS EMPTY";
-    }
-    node *temp;
-    temp = head;
-    head = head->right;
-    head->left = NULL;
-    delete(temp);
+    n--;
 }
 
 void DeleteRandom(int pos){
@@ -139,14 +165,23 @@ void DeleteRandom(int pos){
         q->right = temp;
         temp->left = q;
     }
+    n--;
 }
 
 void Reverse() {
     if(head == NULL)
     {
         cout<<"LIST IS EMPTY";
+        return;
     }
-    cout<<" ";
+    node *temp;
+    temp = head;
+    while(head->right)
+    {
+        head = head->right;
+        
+    }
+
 }
 
 int main(){
@@ -165,14 +200,13 @@ int main(){
         cout<<"\n6.delete at any random position::";
         cout<<"\n7.Display the list::";
         cout<<"\n8.reverse the list::";
+        cout<<"\n9.Display the number of nodes::";
         cout<<"\nEnter::";
         cin>>choice;
         switch(choice)
         {
             case 1:
-            cout<<"\nEnter the Data::";
-            cin>>data;
-            InsertEnd(data);
+            InsertEnd();
             break;
             
             case 2:
@@ -219,6 +253,9 @@ int main(){
             Reverse();
             
             break;
+
+            case 9:
+            cout<<"\nNo. of nodes are::"<<n;
         }
         cout<<"\nDo You want to continue?(y/n)::";
         cin>>ch2;
