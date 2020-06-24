@@ -130,7 +130,7 @@ void DeleteRandom(int pos){
         p = p->right;
         ctr++;
     }
-    if(q->right==NULL){
+    if(p->right==NULL){
         DeleteEnd();
         return;
     }
