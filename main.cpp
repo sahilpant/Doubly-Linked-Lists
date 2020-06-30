@@ -33,6 +33,7 @@ void InsertBeg(int data){
 }
 
 void show(){
+    int line = n;
     if(head == NULL)
     {
         cout<<"LIST IS EMPTY";
@@ -42,7 +43,9 @@ void show(){
     p = head;
     while(p)
     {
-        cout<<p->data<<" ";
+        --line;
+        cout<<p->data;
+        if(line) cout<<"--";
         p = p->right;
     }
 }
