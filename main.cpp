@@ -1,237 +1,250 @@
-#include<stdio.h>
-#include<stdlib.h>
-struct listNode
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct DLLNode
 {
     int data;
-    struct listNode *next;
-}*head;
+    struct DLLNode *left = NULL;
+    struct DLLNode *right = NULL;
+}*head = NULL;
 
-typedef struct listNode node;
+int n = 0;
+typedef struct DLLNode node;
 
-void createList(){
-    node *newNode;int x;
-    newNode = (node*)malloc(sizeof(node));
-    if(!newNode)
-    {
-        printf("Memory Full!!");
-        return;
-    }
-    printf("Enter the data::");
-    scanf("%d",&newNode->data);
-    head = newNode;
-    newNode->next = NULL;
+void CreateList(){
+    int data;
+    node *NewNode;
+    NewNode = new node;
+    cout<<"Enter the data for the first node::";
+    cin>>data;
+    NewNode->data = data;
+    head = NewNode;
+    n++;
 }
 
-void insertEnd(int data){
-    node *p,*q,*newNode;
-    newNode = (node*)malloc(sizeof(node));
-    newNode->data = data;
-    p = head;
-    while(p!=NULL)
-    {
-        q = p;
-        p = p->next;
-    }
-    q->next = newNode;
-    newNode->next = NULL;
+void InsertBeg(int data){
+    node *NewNode;
+    NewNode = new node;
+    NewNode->data = data;
+    NewNode->right = head;
+    head = NewNode;
+    n++;
 }
 
-void insertRandom(int data, int position){
-    int k = 1;
-    node *q,*p,*newNode;
-    newNode = (node*)malloc(sizeof(node));
-    if(!newNode)
-    {
-        printf("Memory Full!!");
-        return;
-    }
-    newNode->data = data;
-    p = head;
-    if(position==1)
-    {
-        head = newNode;
-        newNode->next = p;
-        return;
-    }
-    while(p!=NULL && k<position)
-    {
-        k++;
-        q = p;
-        p = p->next;
-    }
-    q->next = newNode;
-    newNode->next = p;
-}
-
-void deleteBeg(){
-    
+void show(){
     if(head == NULL)
     {
-        printf("LIST EMPTY!!!");
+        cout<<"LIST IS EMPTY";
         return;
     }
-
-    node *temp;
-    temp = head;
-    head = head->next;
-    free(temp);
-}
-
-void deleteEnd(){
-        
-    if(head == NULL)
-    {
-        printf("LIST EMPTY!!!");
-        return;
-    }
-
-    node *p,*q;
-    p = head;
-    while(p->next!=NULL)
-    {
-        q = p;
-        p = p->next;
-    }
-    q->next = NULL;
-    free(p);
-}
-
-void deleteRandom(int position){
-    
-    if(head == NULL)
-    {
-        printf("LIST EMPTY!!!");
-        return;
-    }
-
-    int k=1;
-    node *temp,*q,*p;
-    p = head;
-    while(p!=NULL && k<position)
-    {
-        k++;
-        q = p;
-        p = p->next;
-    }
-    q->next = p->next;
-    free(p);
-}
-
-void insertBeg(int data)
-{
-   node *newNode,*p;
-    newNode = (node*)malloc(sizeof(node));
-    if(!newNode)
-    {
-        printf("Memory Full!!");
-        return;
-    }
-    newNode->data = data;
-    p = newNode;
-    newNode->next = head;
-    head = p;
-}
-
-void displayList(){
-    if(head == NULL)
-    {
-        printf("LIST EMPTY!!!");
-        return;
-    }
-    int k=1;
     node *p;
     p = head;
-    while(p!=NULL)
+    while(p)
     {
-        printf("Element %d: %d ",k,p->data);
-        p = p->next;
-        k++;
+        cout<<p->data<<" ";
+        p = p->right;
     }
 }
-void Reverse(){
 
-    if(head == NULL)
+void RandomInsert(int data,int pos){
+    node *temp, *p, *q, *NewNode;
+    NewNode = new node;
+    NewNode->data = data;
+    int ctr = 1;
+    p = head;
+    if(pos==1){    
+        NewNode->right = head;
+        head = NewNode;
+    }
+    else{
+        while( p && ctr < pos ){
+            q = p;
+            p = p->right;
+            ctr++;
+        }
+        if(q->right==NULL){
+            q->right = NewNode;
+            NewNode->left = q;
+            NewNode->right = NULL;
+        }
+        else{
+            p->left = NewNode;
+            NewNode->right = p;
+            q->right = NewNode;
+            NewNode->left = q;
+        }
+    }
+    n++;
+}
+
+void InsertEnd(){
+    if(n==0)
     {
-        printf("LIST EMPTY!!!");
+        CreateList();
         return;
     }
-    node *temp = NULL,*nextNode = NULL;
-    while(head)
-    {
-        nextNode = head->next;
-        head->next = temp;
-        temp = head;
-        head = nextNode;
+    int data;
+    cout<<"Enter the data::";
+    cin>>data;
+    node *NewNode, *p,*q;
+    NewNode = new node;
+    NewNode->data = data;
+    p = head;
+    while(p){
+        q = p;
+        p = p->right;
     }
-    head = temp;
-    printf("===The List has been reversed===");
+    q->right = NewNode;
+    NewNode->left = q;
+    NewNode->right = NULL;
+    n++;
 }
 
-
-void main()
-{
-    char ch1;int ch2;
-    int choice,data,position; 
-    printf("Do You want to create a Link List?(Y/N)::");
-    scanf("%c",&ch1);
-    (ch1=='y'||ch1=='Y') ? createList() : exit(0);
-    do
+void DeleteBeg(){
+    if(head == NULL)
     {
-        printf("\nchoose from the following options::");
-        printf("\n1.Insert at the end::");
-        printf("\n2.Insert at the Beginning::");
-        printf("\n3.Insert at a random position::");
-        printf("\n4.delete at the end::");
-        printf("\n5.delete at the beginning::");
-        printf("\n6.delete at any random position::");
-        printf("\n7.Display the list::");
-        printf("\n8.reverse the list::");
-        printf("\nEnter::");
-        scanf("%d",&choice);
+        cout<<"LIST IS EMPTY";
+        return;
+    }
+    node *temp;
+    temp = head;
+    head = head->right;
+    delete(temp);
+    n--;
+}
+
+void DeleteEnd()
+{
+    if(n==1)
+    {
+        DeleteBeg();
+        return;
+    }
+    if(head == NULL)
+    {
+        cout<<"LIST IS EMPTY";
+        return;
+    }
+    node *p, *q, *temp;
+    p = head;
+    while(p)
+    {
+        q = p;
+        p = p->right;
+    }
+    temp = q->left;
+    temp->right = NULL;
+    delete(q);
+    n--;
+}
+
+void DeleteRandom(int pos){
+    if(head == NULL)
+    {
+        cout<<"LIST IS EMPTY";
+    }
+    if(pos==1){
+        DeleteBeg();
+        return;
+    }
+    node *p, *q, *temp;
+    int ctr = 1;
+    p = head;
+    while(p && ctr < pos){
+        q = p;
+        p = p->right;
+        ctr++;
+    }
+    if(p->right==NULL){
+        DeleteEnd();
+        return;
+    }
+    else{
+        temp = p->right;
+        q->right = temp;
+        temp->left = q;
+    }
+    n--;
+}
+
+void Reverse() {
+    if(head == NULL)
+    {
+        cout<<"LIST IS EMPTY";
+        return;
+    }
+    node *temp;
+    temp = head;
+    while(head->right)
+    {
+        head = head->right;
+        
+    }
+
+}
+
+int main(){
+    char ch1,ch2;
+    int choice,data,position;
+    cout<<"Do you want to create a Doubly Linked List::";
+    cin>>ch1;
+    (ch1=='y'||ch1=='Y') ? CreateList() : exit(0);
+    do{
+        cout<<"\nchoose from the following options::";
+        cout<<"\n1.Insert at the end::";
+        cout<<"\n2.Insert at the Beginning::";
+        cout<<"\n3.Insert at a random position::";
+        cout<<"\n4.delete at the end::";
+        cout<<"\n5.delete at the beginning::";
+        cout<<"\n6.delete at any random position::";
+        cout<<"\n7.Display the list::";
+        cout<<"\n8.reverse the list::";
+        cout<<"\n9.Display the number of nodes::";
+        cout<<"\nEnter::";
+        cin>>choice;
         switch(choice)
         {
             case 1:
-            printf("\nEnter the Data::");
-            scanf("%d",&data);
-            insertEnd(data);
+            InsertEnd();
             break;
             
             case 2:
-            printf("\nEnter the Data::");
-            scanf("%d",&data);
-            insertBeg(data);
+            cout<<"\nEnter the Data::";
+            cin>>data;
+            InsertBeg(data);
             break;
 
             case 3:
             
-            printf("\nEnter the Data and position::");
-            scanf("%d%d",&data,&position);
-            insertRandom(data,position);
+            cout<<"\nEnter the Data and position::";
+            cin>>data>>position;
+            RandomInsert(data,position);
             break;
 
             case 4:
             
-            printf("Data has been deleted==>");
-            deleteEnd();
+            cout<<"Data has been deleted==>";
+            DeleteEnd();
             break;
             
             case 5:
 
-            deleteBeg();
-            printf("\nData has been deleted==>");
+            DeleteBeg();
+            cout<<"\nData has been deleted==>";
             break;
 
             case 6:
 
-            printf("\nEnter the position::");
-            scanf("%d",&position);
-            deleteRandom(position);
-            printf("\nData has been deleted==>");
+            cout<<"\nEnter the position::";
+            cin>>position;
+            DeleteRandom(position);
+            cout<<"\nData has been deleted==>";
             break;
 
             case 7:
             
-            displayList();
+            show();
             
             break;
 
@@ -240,8 +253,11 @@ void main()
             Reverse();
             
             break;
+
+            case 9:
+            cout<<"\nNo. of nodes are::"<<n;
         }
-        printf("\nDo You want to continue?(for yes->(1)::");
-        scanf("%d",&ch2);
-    }while(ch2==1);
+        cout<<"\nDo You want to continue?(y/n)::";
+        cin>>ch2;
+    }while(ch2=='y'||ch2=='Y');
 }
