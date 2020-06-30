@@ -182,6 +182,7 @@ void Reverse() {
     while(head->right)
     {
         head = head->right;
+        head = temp;
         
     }
 
