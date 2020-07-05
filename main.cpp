@@ -32,24 +32,6 @@ void InsertBeg(int data){
     n++;
 }
 
-void show(){
-    int line = n;
-    if(head == NULL)
-    {
-        cout<<"LIST IS EMPTY";
-        return;
-    }
-    node *p;
-    p = head;
-    while(p)
-    {
-        --line;
-        cout<<p->data;
-        if(line) cout<<"--";
-        p = p->right;
-    }
-}
-
 void RandomInsert(int data,int pos){
     node *temp, *p, *q, *NewNode;
     NewNode = new node;
@@ -146,6 +128,7 @@ void DeleteRandom(int pos){
     if(head == NULL)
     {
         cout<<"LIST IS EMPTY";
+        return;
     }
     if(pos==1){
         DeleteBeg();
@@ -177,15 +160,37 @@ void Reverse() {
         cout<<"LIST IS EMPTY";
         return;
     }
-    node *temp;
-    temp = head;
+    node *temp,*p;
     while(head->right)
     {
+        p = head;
         head = head->right;
-        head = temp;
-        
+        temp = p->left;
+        p->left = p->right;
+        p->right = temp;
     }
+        temp = head->left;
+        head->left = head->right;
+        head->right = temp;
+}
 
+
+void show(){
+    int line = n;
+    if(head == NULL)
+    {
+        cout<<"LIST IS EMPTY";
+        return;
+    }
+    node *p;
+    p = head;
+    while(p)
+    {
+        --line;
+        cout<<p->data;
+        if(line) cout<<"--";
+        p = p->right;
+    }
 }
 
 int main(){
@@ -227,23 +232,27 @@ int main(){
             break;
 
             case 4:
-            
-            cout<<"Data has been deleted==>";
+
+            if(head!=NULL) cout<<"Data has been deleted";
             DeleteEnd();
             break;
             
             case 5:
 
+            if(head!=NULL) cout<<"Data has been deleted";
             DeleteBeg();
-            cout<<"\nData has been deleted==>";
+
+            
             break;
 
             case 6:
 
             cout<<"\nEnter the position::";
             cin>>position;
+            if(n>=1) cout<<"Data has been deleted";
             DeleteRandom(position);
-            cout<<"\nData has been deleted==>";
+
+            
             break;
 
             case 7:
